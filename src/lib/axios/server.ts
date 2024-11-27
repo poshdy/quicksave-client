@@ -3,7 +3,7 @@ import { BASE_URL } from "../constants";
 import { userStore } from "@/zustand/user.store";
 // import { jwtDecode } from "jwt-decode";
 // import dayjs from "dayjs";
-export const axiosClient = axios.create({
+export const axiosServer = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
   headers: { Authorization: userStore?.getState()?.access_token },

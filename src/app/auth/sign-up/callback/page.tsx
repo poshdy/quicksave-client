@@ -4,21 +4,20 @@ import { BASE_URL } from "@/lib/constants";
 import { User } from "@/types/user.types";
 import axios from "axios";
 import React from "react";
-import useSWR from "swr";
+import { useQuery } from "@tanstack/react-query";
 
 const SignUpCallback = ({
   searchParams,
 }: {
   searchParams: { code: string };
 }) => {
-  const { data, isLoading } = useSWR(
-    "signup.callback",
-    async () =>
+  const { data, isLoading } = useQuery({
+    queryKey: ["signup.callback"],
+    queryFn: async () =>
       await axios.get(
-        `${BASE_URL}/auth/google/callback?code=${searchParams?.code}`,
-        { withCredentials: true }
-      )
-  );
+        `${BASE_URL}/auth/google/callback?code=${searchParams.code}`
+      ),
+  });
 
   const user = {
     id: !isLoading && data?.data?.id,

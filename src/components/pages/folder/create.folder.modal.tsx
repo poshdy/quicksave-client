@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { AiOutlineFolderAdd } from "react-icons/ai";
-import { folderSchema, CreateFormPayload } from "@/form-schemas/folder";
+import { folderSchema, CreateFolderPayload } from "@/form-schemas/folder";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -23,20 +23,32 @@ import {
 } from "@/components/ui/form";
 // import { axiosClient } from "@/lib/axios/client";
 import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createFolder } from "@/lib/actions/folder.actions";
 
 export function CreateFolderModal() {
-  const form = useForm<CreateFormPayload>({
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (values: CreateFolderPayload) => createFolder(values),
+  });
+  const form = useForm<CreateFolderPayload>({
     resolver: zodResolver(folderSchema),
     defaultValues: {
       name: "un-titled",
     },
   });
 
-  const handleSubmit = async (values: CreateFormPayload) => {
+  const handleSubmit = async (values: CreateFolderPayload) => {
     try {
-      //   const res = await axiosClient.post("/folders", values);
-      toast(`${values.name} folder is created successfully!`);
-      console.log(values);
+      await mutateAsync(values, {
+        onError(error) {
+          console.log(error);
+        },
+        onSuccess() {
+          queryClient.invalidateQueries({ queryKey: ["folders"] });
+          toast.success(`${values.name} folder is created successfully`);
+        },
+      });
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +56,7 @@ export function CreateFolderModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="w-36 aspect-video bg-transparent border rounded-2xl flex flex-col items-start justify-center gap-1 px-4 py-3">
+        <div className="w-36 cursor-pointer aspect-video bg-transparent border rounded-2xl flex flex-col items-start justify-center gap-1 px-4 py-3">
           <AiOutlineFolderAdd size={20} />
           <h4 className="text-xs">Create a folder</h4>
         </div>
@@ -56,7 +68,10 @@ export function CreateFolderModal() {
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <form
+            className="space-y-2"
+            onSubmit={form.handleSubmit(handleSubmit)}
+          >
             <FormField
               name="name"
               control={form.control}
@@ -71,7 +86,9 @@ export function CreateFolderModal() {
               )}
             />
             <DialogFooter>
-              <Button type="submit">Create</Button>
+              <Button disabled={isPending} type="submit">
+                Create
+              </Button>
             </DialogFooter>
           </form>
         </Form>

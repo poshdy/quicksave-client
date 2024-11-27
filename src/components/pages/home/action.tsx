@@ -8,10 +8,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   AiOutlineGoogle,
-  AiOutlineFile,
+  // AiOutlineFile,
   AiOutlineFolder,
 } from "react-icons/ai";
 import { CreateFolderModal } from "../folder/create.folder.modal";
+import FileUpload from "./file-upload";
 const Actions = () => {
   return (
     <section className="flex items-start gap-2">
@@ -24,7 +25,7 @@ const Actions = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem>
-            <AiOutlineFile /> Files
+            <FileUpload />
           </DropdownMenuItem>
           <DropdownMenuItem>
             <AiOutlineFolder /> Folders

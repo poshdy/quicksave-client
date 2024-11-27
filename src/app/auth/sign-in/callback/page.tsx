@@ -2,13 +2,13 @@
 import React from "react";
 import LoginUser from "@/components/pages/auth/loginUser";
 import { User } from "@/types/user.types";
-import useSWR from "swr";
 import { loginUser } from "@/lib/actions/user.actions";
+import { useQuery } from "@tanstack/react-query";
 const Callback = ({ searchParams }: { searchParams: { token: string } }) => {
-  const { data, isLoading } = useSWR(
-    "login.user",
-    async () => await loginUser(searchParams?.token)
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ["login.callback"],
+    queryFn: async () => loginUser(searchParams.token),
+  });
 
   const user = {
     id: !isLoading && data.id,

@@ -1,13 +1,15 @@
-import Actions from "@/components/pages/home/action";
+// import Actions from "@/components/pages/home/action";
 import FileTypesCount from "@/components/pages/home/file-types.count";
-import Recents from "@/components/pages/home/recent-activity";
+import FileUpload from "@/components/pages/home/file-upload";
+// import Recents from "@/components/pages/home/recent-activity";
 import React from "react";
 
 const Home = () => {
   return (
     <section>
-      <Actions />
-      <Recents />
+      {/* <Actions /> */}
+      {/* <Recents /> */}
+      <FileUpload />
       <FileTypesCount />
     </section>
   );

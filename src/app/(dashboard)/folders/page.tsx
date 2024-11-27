@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const FoldersPage = (props: Props) => {
-  return (
-    <div>FoldersPage</div>
-  )
-}
+  return <div>FoldersPage</div>;
+};
 
-export default FoldersPage
+export default FoldersPage;
